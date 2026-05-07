@@ -178,7 +178,7 @@ def check_models_exist() -> bool:
 
 # ── Sidebar ──────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## AI-IDS Control Panel")
+    st.markdown("## ML-IDS Control Panel")
     st.markdown("---")
 
     # Model selection
@@ -221,7 +221,7 @@ with st.sidebar:
 st.markdown(
     """
     <div class="main-header">
-        <h1>AI-Based Intrusion Detection System</h1>
+        <h1>ML-Based Intrusion Detection System</h1>
         <p>Upload network traffic data to detect and classify intrusions using machine learning</p>
     </div>
     """,
