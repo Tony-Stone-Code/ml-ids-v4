@@ -29,7 +29,7 @@ from sklearn.metrics import (
 # ── Page Config ──────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="AI-IDS | Intrusion Detection System",
-    page_icon="🛡️",
+    page_icon="AI",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -178,11 +178,11 @@ def check_models_exist() -> bool:
 
 # ── Sidebar ──────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🛡️ AI-IDS Control Panel")
+    st.markdown("## AI-IDS Control Panel")
     st.markdown("---")
 
     # Model selection
-    st.markdown("### 🤖 Select Model")
+    st.markdown("### Select Model")
     selected_model_name = st.selectbox(
         "Choose a classifier:",
         options=list(MODEL_OPTIONS.keys()),
@@ -194,7 +194,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Model info
-    st.markdown("### 📊 Model Info")
+    st.markdown("### Model Info")
     model_descriptions = {
         "Logistic Regression": "A linear model for classification. Fast and interpretable but may underperform on complex patterns.",
         "Decision Tree": "A tree-based model that learns decision rules. Good interpretability with moderate performance.",
@@ -203,7 +203,7 @@ with st.sidebar:
     st.info(model_descriptions[selected_model_name])
 
     st.markdown("---")
-    st.markdown("### 📁 Accepted Formats")
+    st.markdown("### Accepted Formats")
     st.markdown("- `.csv` — Comma-separated values")
     st.markdown("- `.parquet` — Apache Parquet (faster)")
 
@@ -221,7 +221,7 @@ with st.sidebar:
 st.markdown(
     """
     <div class="main-header">
-        <h1>🛡️ AI-Based Intrusion Detection System</h1>
+        <h1>AI-Based Intrusion Detection System</h1>
         <p>Upload network traffic data to detect and classify intrusions using machine learning</p>
     </div>
     """,
@@ -231,13 +231,13 @@ st.markdown(
 # Check if models are trained
 if not check_models_exist():
     st.error(
-        "⚠️ **Models not found!** Please train the models first by running:\n\n"
+        "Models not found. Please train the models first by running:\n\n"
         "```bash\npython src/convert_to_parquet.py\npython src/train.py\n```"
     )
     st.stop()
 
 # File uploader
-st.markdown("### 📤 Upload Test Data")
+st.markdown("### Upload Test Data")
 uploaded_file = st.file_uploader(
     "Drop your network traffic dataset here",
     type=["csv", "parquet"],
@@ -246,7 +246,7 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
     # ── Load uploaded data ───────────────────────────────────────────
-    with st.spinner("📂 Loading data..."):
+    with st.spinner("Loading data..."):
         if uploaded_file.name.endswith(".parquet"):
             df = pd.read_parquet(uploaded_file)
         else:
@@ -276,13 +276,13 @@ if uploaded_file is not None:
             elif len(df_peek.columns) == 49:
                 # Headerless raw UNSW-NB15 CSV — assign column names
                 df = pd.read_csv(uploaded_file, header=None, names=RAW_COLS, low_memory=False)
-                st.info("🔄 **Raw UNSW-NB15 CSV detected** (no headers) — auto-assigned 49 column names.")
+                st.info("Raw UNSW-NB15 CSV detected (no headers). Auto-assigned 49 column names.")
             elif len(df_peek.columns) == 48:
                 df = pd.read_csv(uploaded_file, header=None, names=RAW_COLS[:48], low_memory=False)
-                st.info("🔄 **Raw UNSW-NB15 CSV detected** (48 columns) — auto-assigned column names.")
+                st.info("Raw UNSW-NB15 CSV detected (48 columns). Auto-assigned column names.")
             else:
                 df = pd.read_csv(uploaded_file, low_memory=False)
-                st.warning(f"⚠️ CSV has {len(df.columns)} columns — expected 49 (UNSW-NB15). Results may be unreliable.")
+                st.warning(f"CSV has {len(df.columns)} columns. Expected 49 (UNSW-NB15). Results may be unreliable.")
 
             # Normalize attack_cat names (raw files use slightly different names)
             if "attack_cat" in df.columns:
@@ -296,10 +296,10 @@ if uploaded_file is not None:
                 # Normalize empty/NaN to Normal
                 df["attack_cat"] = df["attack_cat"].replace({"": "Normal", "nan": "Normal", " ": "Normal"})
 
-    st.success(f"✅ Loaded **{len(df):,}** rows × **{len(df.columns)}** columns")
+    st.success(f"Loaded {len(df):,} rows × {len(df.columns)} columns")
 
     # Data preview
-    with st.expander("👁️ Preview Uploaded Data", expanded=False):
+    with st.expander("Preview Uploaded Data", expanded=False):
         st.dataframe(df.head(10), use_container_width=True)
 
     # ── Load model & encoder ─────────────────────────────────────────
@@ -311,7 +311,7 @@ if uploaded_file is not None:
         st.stop()
 
     # ── Preprocess & Predict ─────────────────────────────────────────
-    with st.spinner(f"🔍 Running {selected_model_name} inference..."):
+    with st.spinner(f"Running {selected_model_name} inference..."):
         X_scaled, y_true = transform_new(df)
         y_pred = model.predict(X_scaled)
 
@@ -327,18 +327,18 @@ if uploaded_file is not None:
         # ── Accuracy & Metrics ───────────────────────────────────────
         acc = accuracy_score(y_true, y_pred)
 
-        st.markdown("### 📈 Evaluation Results")
+        st.markdown("### Evaluation Results")
 
         # Metric cards
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("🎯 Accuracy", f"{acc * 100:.2f}%")
+            st.metric("Accuracy", f"{acc * 100:.2f}%")
         with col2:
             attack_count = int(np.sum(pred_labels != "Normal"))
-            st.metric("🚨 Attacks Detected", f"{attack_count:,}")
+            st.metric("Attacks Detected", f"{attack_count:,}")
         with col3:
             normal_count = int(np.sum(pred_labels == "Normal"))
-            st.metric("✅ Normal Traffic", f"{normal_count:,}")
+            st.metric("Normal Traffic", f"{normal_count:,}")
 
         st.markdown("---")
 
@@ -347,7 +347,7 @@ if uploaded_file is not None:
 
         # Confusion Matrix
         with col_left:
-            st.markdown("### 🔢 Confusion Matrix")
+            st.markdown("### Confusion Matrix")
             cm = confusion_matrix(y_true, y_pred)
             fig, ax = plt.subplots(figsize=(10, 8))
             sns.heatmap(
@@ -378,7 +378,7 @@ if uploaded_file is not None:
 
         # Prediction Distribution
         with col_right:
-            st.markdown("### 📊 Prediction Distribution")
+            st.markdown("### Prediction Distribution")
             pred_counts = pd.Series(pred_labels).value_counts()
             fig2, ax2 = plt.subplots(figsize=(10, 8))
             colors = sns.color_palette("viridis", len(pred_counts))
@@ -405,7 +405,7 @@ if uploaded_file is not None:
 
         # ── Precision / Recall / F1 Summary ─────────────────────────
         st.markdown("---")
-        st.markdown("### 🧮 Precision / Recall / F1 Summary")
+        st.markdown("### Precision / Recall / F1 Summary")
 
         label_indices = np.arange(len(le_target.classes_))
         per_class_prec, per_class_rec, per_class_f1, per_class_support = precision_recall_fscore_support(
@@ -452,16 +452,16 @@ if uploaded_file is not None:
             use_container_width=True,
         )
 
-        st.markdown("#### 📊 Aggregate Metrics Chart")
+        st.markdown("#### Aggregate Metrics Chart")
         st.bar_chart(agg_df)
 
-        with st.expander("📊 Per-Class Metrics Chart", expanded=False):
+        with st.expander("Per-Class Metrics Chart", expanded=False):
             per_class_chart_df = per_class_df.set_index("class")[["precision", "recall", "f1"]]
             st.bar_chart(per_class_chart_df)
 
         # Classification Report
         st.markdown("---")
-        st.markdown("### 📋 Classification Report")
+        st.markdown("### Classification Report")
         report_dict = classification_report(
             y_true,
             y_pred,
@@ -490,22 +490,22 @@ if uploaded_file is not None:
 
     else:
         # ── No ground truth — just show predictions ─────────────────
-        st.markdown("### 🔍 Prediction Results")
+        st.markdown("### Prediction Results")
         st.warning(
-            "⚠️ No `attack_cat` column found in uploaded data. "
+            "No `attack_cat` column found in uploaded data. "
             "Showing predictions only (no accuracy metrics)."
         )
 
         col1, col2 = st.columns(2)
         with col1:
             attack_count = int(np.sum(pred_labels != "Normal"))
-            st.metric("🚨 Attacks Detected", f"{attack_count:,}")
+            st.metric("Attacks Detected", f"{attack_count:,}")
         with col2:
             normal_count = int(np.sum(pred_labels == "Normal"))
-            st.metric("✅ Normal Traffic", f"{normal_count:,}")
+            st.metric("Normal Traffic", f"{normal_count:,}")
 
         # Prediction distribution
-        st.markdown("### 📊 Prediction Distribution")
+        st.markdown("### Prediction Distribution")
         pred_counts = pd.Series(pred_labels).value_counts()
         fig, ax = plt.subplots(figsize=(10, 6))
         colors = sns.color_palette("viridis", len(pred_counts))
@@ -530,7 +530,7 @@ if uploaded_file is not None:
 
     # ── Detailed Predictions Table ───────────────────────────────────
     st.markdown("---")
-    st.markdown("### 🔎 Sample Predictions")
+    st.markdown("### Sample Predictions")
     result_df = df.copy()
     result_df["Predicted_Class"] = pred_labels
 
@@ -545,12 +545,12 @@ if uploaded_file is not None:
 
     # ── Download Predictions ─────────────────────────────────────────
     st.markdown("---")
-    st.markdown("### 📥 Download Results")
+    st.markdown("### Download Results")
     export_cols = ["Predicted_Class"] + [c for c in ["proto", "service", "state", "attack_cat", "dur", "sbytes", "dbytes"] if c in result_df.columns]
     export_df = result_df[export_cols]
     csv_data = export_df.to_csv(index=False).encode("utf-8")
     st.download_button(
-        label="📥 Download Predictions as CSV",
+        label="Download Predictions as CSV",
         data=csv_data,
         file_name="ids_predictions.csv",
         mime="text/csv",
@@ -565,7 +565,7 @@ else:
              background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
              border-radius: 16px; border: 1px dashed rgba(100,100,255,0.3);
              margin: 2rem 0;">
-            <h2 style="color: #7c83ff; margin-bottom: 1rem;">📤 Upload Your Data</h2>
+            <h2 style="color: #7c83ff; margin-bottom: 1rem;">Upload Your Data</h2>
             <p style="color: rgba(255,255,255,0.6); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">
                 Drop a <strong>.csv</strong> or <strong>.parquet</strong> file above to begin 
                 intrusion detection analysis using the selected ML model.

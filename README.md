@@ -2,6 +2,23 @@
 
 AI-based Intrusion Detection System that classifies network traffic into Normal + attack categories using the UNSW-NB15 benchmark dataset.
 
+## Problem Statement
+
+Modern networks face frequent cyber attacks, and manual inspection of network logs is too slow to keep up. The goal of this project is to automate detection and classify attack types so a defender can respond faster and more accurately.
+
+## Why This Project Matters
+
+- Faster detection reduces the time attackers stay inside a network.
+- Classification helps prioritize response actions by attack type.
+- The solution is reproducible and can be extended to real deployments.
+
+## Improvements Over Typical Student IDS Projects
+
+- End-to-end pipeline from raw data through preprocessing, training, and deployment.
+- Multiple models compared with consistent evaluation metrics.
+- Clear UI for non-technical users with built-in charts and reports.
+- Balanced demo subsets for class-imbalance walkthroughs.
+
 ## Quick Start
 
 ```bash
