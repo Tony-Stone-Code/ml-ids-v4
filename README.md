@@ -2,15 +2,25 @@
 
 AI-based Intrusion Detection System that classifies network traffic into Normal + attack categories using the UNSW-NB15 benchmark dataset.
 
-## Problem Statement
+## Problem Statement (2026 Context)
 
-Modern networks face frequent cyber attacks, and manual inspection of network logs is too slow to keep up. The goal of this project is to automate detection and classify attack types so a defender can respond faster and more accurately.
+By 2026, enterprise and campus networks face faster, stealthier attacks and higher traffic volume (cloud services, IoT, and remote access). Manual inspection of logs and alerts cannot scale, and most student IDS projects stop at offline modeling without a usable pipeline. The goal here is to deliver an end-to-end, deployable IDS that detects and classifies attack types so responders can prioritize actions quickly and reliably.
 
 ## Why This Project Matters
 
 - Faster detection reduces the time attackers stay inside a network.
 - Classification helps prioritize response actions by attack type.
 - The solution is reproducible and can be extended to real deployments.
+
+## Approach Summary
+
+1. **Use a trusted benchmark** (UNSW-NB15) with an official train/test split to avoid evaluation bias.
+2. **Clean and normalize raw data** to handle missing values, mixed types, and inconsistent labels.
+3. **Encode categorical features** and scale numeric features for stable model behavior.
+4. **Engineer traffic behavior ratios** to capture asymmetric attack patterns.
+5. **Train and compare multiple models** (Logistic Regression, Decision Tree, XGBoost).
+6. **Evaluate with fairness-aware metrics** (macro/weighted precision, recall, F1) and confusion matrices.
+7. **Deploy a Streamlit app** so non-technical users can run and interpret results.
 
 ## Improvements Over Typical Student IDS Projects
 
