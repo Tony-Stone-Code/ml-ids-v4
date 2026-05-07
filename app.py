@@ -28,8 +28,8 @@ from sklearn.metrics import (
 
 # ── Page Config ──────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="AI-IDS | Intrusion Detection System",
-    page_icon="AI",
+    page_title="ML-IDS | Intrusion Detection System",
+    page_icon="ML",
     layout="wide",
     initial_sidebar_state="expanded",
 )
