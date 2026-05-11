@@ -300,7 +300,7 @@ if uploaded_file is not None:
 
     # Data preview
     with st.expander("Preview Uploaded Data", expanded=False):
-        st.dataframe(df.head(10), use_container_width=True)
+        st.dataframe(df.head(10))
 
     # ── Load model & encoder ─────────────────────────────────────────
     model = load_model(selected_model_key)
